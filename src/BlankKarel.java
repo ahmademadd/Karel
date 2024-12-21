@@ -9,6 +9,8 @@ import stanford.karel.*;
 public class BlankKarel extends SuperKarel {
 
 	public void run() {
+		startPosition();
+
 		int[] xy = calculateArea();
 		int x = xy[0], y = xy[1];
 
@@ -75,31 +77,7 @@ public class BlankKarel extends SuperKarel {
 
 	private void bothEven(int x, int y) {
 	//starting from northeast facing north
-		if (x != 2){
-			divideX(x-1);
 
-			turnRight();
-			move();
-			turnRight();
-
-			putBeeper();
-			while (frontIsClear()){
-				move();
-				putBeeper();
-			}
-		}
-		if (y != 2){
-			divideY(y-1);
-
-			turnLeft();
-			move();
-			turnLeft();
-			putBeeper();
-			while (frontIsClear()){
-				move();
-				putBeeper();
-			}
-		}
 	}
 
 	private void oddEven(int x, int y) {
@@ -220,6 +198,27 @@ public class BlankKarel extends SuperKarel {
 				turnRight();
 				move();
 			}
+		}
+	}
+
+	private void startPosition(){
+
+		while (notFacingSouth()) {
+			turnLeft();
+		}
+		while (frontIsClear()) {
+			move();
+		}
+
+		if (rightIsClear()) {
+			turnRight();
+			while (frontIsClear()) {
+				move();
+			}
+		}
+
+		while (notFacingEast()) {
+			turnLeft();
 		}
 	}
 }
