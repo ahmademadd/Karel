@@ -20,14 +20,14 @@ public class BlankKarel extends SuperKarel {
 
 		println("Beeper count = " + beeperCount);
 	}
-	private static int moveCounter = 0;
+	public static int moveCounter = 0;
 	@Override
 	public void move() {
 		super.move();
 		moveCounter++;
 		println(moveCounter);
 	}
-	private static int beeperCount = 0;
+	public static int beeperCount = 0;
 	@Override
 	public void putBeeper() {
 		if (noBeepersPresent()) {
@@ -95,7 +95,7 @@ public class BlankKarel extends SuperKarel {
 		else
 			yAxisCurve(x, y);
 	}
-	private void yAxisCurve(int x, int y){
+	public void yAxisCurve(int x, int y){
 		int curveFactor = (y - x) / 2;
 		curveFactor++;
 
@@ -141,7 +141,7 @@ public class BlankKarel extends SuperKarel {
 		putBeeper();
 		moveWhileFrontClearPutBeeper();
 	}
-	private void xAxisCurve(int x, int y) {
+	public void xAxisCurve(int x, int y) {
 		//starting northeast facing north
 		int curveFactor = (x - y) / 2;
 		curveFactor++;
@@ -188,7 +188,7 @@ public class BlankKarel extends SuperKarel {
 		putBeeper();
 		moveWhileFrontClearPutBeeper();
 	}
-	private void divideY(int y){
+	public void divideY(int y){
 		//starting middleSouth facing south
 		turnAround();
 		for (int i = 0; i < y/2; i++) {
@@ -200,7 +200,7 @@ public class BlankKarel extends SuperKarel {
 		turnAround();
 		moveWhileFrontClearPutBeeper();
 	}
-	private void doubleDivideY(int y){
+	public void doubleDivideY(int y){
 		divideY(y-1);
 
 		turnLeft();
@@ -209,7 +209,7 @@ public class BlankKarel extends SuperKarel {
 		putBeeper();
 		moveWhileFrontClearPutBeeper();
 	}
-	private void divideX(int x){
+	public void divideX(int x){
 		//starting from northeast facing north
 		turnLeft();
 		for (int i = 0; i < x/2; i++) {
@@ -219,7 +219,7 @@ public class BlankKarel extends SuperKarel {
 		putBeeper();
 		moveWhileFrontClearPutBeeper();
 	}
-	private void doubleDivideX(int x){
+	public void doubleDivideX(int x){
 		divideX(x-1);
 
 		turnRight();
@@ -229,7 +229,7 @@ public class BlankKarel extends SuperKarel {
 		putBeeper();
 		moveWhileFrontClearPutBeeper();
 	}
-	private void threeChambersY(int y){
+	public void threeChambersY(int y){
 		//starting from northeast facing north
 		turnAround();
 		for (int column = 0; column < 2; column++) {
@@ -248,7 +248,7 @@ public class BlankKarel extends SuperKarel {
 			}
 		}
 	}
-	private void threeChambersX(int x){
+	public void threeChambersX(int x){
 		//starting from northeast facing north
 		turnLeft();
 		for (int column = 0; column < 2; column++) {
@@ -267,7 +267,7 @@ public class BlankKarel extends SuperKarel {
 			}
 		}
 	}
-	private void startPosition(){
+	public void startPosition(){
 		while (notFacingSouth()) {
 			turnLeft();
 		}
