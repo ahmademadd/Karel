@@ -3,11 +3,9 @@
  * ---------------------
  * This class is a blank one that you can change at will.
  */
-
 import stanford.karel.*;
 
 public class BlankKarel extends SuperKarel {
-
 	public void run() {
 		startPosition();
 
@@ -16,24 +14,20 @@ public class BlankKarel extends SuperKarel {
 
 		if (x%2 == 1 && y%2 == 1)
 			bothOdd(x, y);
-		else if (x%2 == 0 && y%2 == 0) {
+		else if (x%2 == 0 && y%2 == 0)
 			bothEven(x, y);
-		}else oddEven(x, y);
+		else oddEven(x, y);
 
 		println("Beeper count = " + beeperCount);
 	}
-
 	private static int moveCounter = 0;
-
 	@Override
 	public void move() {
 		super.move();
 		moveCounter++;
 		println(moveCounter);
 	}
-
 	private static int beeperCount = 0;
-
 	@Override
 	public void putBeeper() {
 		if (noBeepersPresent()) {
@@ -41,29 +35,14 @@ public class BlankKarel extends SuperKarel {
 			beeperCount++;
 		}
 	}
-
-	private int[] calculateArea(){
-		int x = 1,y = 1;
-		while (frontIsClear()){
-			x++;
-			move();
-		}
-		turnLeft();
-		while (frontIsClear()){
-			y++;
-			move();
-		}
-		return new int[]{x,y};
-	}
-
 	private void bothOdd(int x, int y){
 		//starting from northeast facing north
-		if (x > y && (x-2)%3 == 0) {
-			threeChambersX(x);
+		if (y > x && (y-2)%3 == 0 && x == 1) {
+			threeChambersY(y);
 			return;
 		}
-		if (y > x && (y-2)%3 == 0){
-			threeChambersY(y);
+		if (x > y && (x-2)%3 == 0 && y == 1) {
+			threeChambersX(x);
 			return;
 		}
 		if (x != 1){
@@ -72,58 +51,142 @@ public class BlankKarel extends SuperKarel {
 		if (y != 1){
 			divideY(y);
 		}
-
 	}
-
-	private void bothEven(int x, int y) {
-	//starting from northeast facing north
-
-	}
-
 	private void oddEven(int x, int y) {
-		if (y > x && (y-2)%3 == 0 && y%2 == 1) {
+		if ((y-2)%3 == 0 && x == 2) {
 			threeChambersY(y);
 			return;
 		}
-		if (x > y && (x-2)%3 == 0 && x%2 == 1) {
+		if ((x-2)%3 == 0 && y == 2) {
 			threeChambersX(x);
 			return;
 		}
 		if (x%2 == 0){
-			if (x != 2){
-				divideX(x-1);
-
-				turnRight();
-				move();
-				turnRight();
-
-				putBeeper();
-				while (frontIsClear()){
-					move();
-					putBeeper();
-				}
+			if (x != 2) {
+				doubleDivideX(x);
 			}
 			if (y != 1){
 				divideY(y);
 			}
-		}
-		else if (x%2 == 1){
+		} else if (x%2 == 1){
 			if (x != 1){
 				divideX(x);
 			}
 			if (y != 2){
-				divideY(y-1);
-
-				turnLeft();
-				move();
-				turnLeft();
-				putBeeper();
-				while (frontIsClear()){
-					move();
-					putBeeper();
-				}
+				doubleDivideY(y);
 			}
 		}
+	}
+	private void bothEven(int x, int y) {
+		//starting from northeast facing north
+		if (y == 2 && x == 2){
+			return;
+		}
+		if (x == 2){
+			doubleDivideY(y);
+			return;
+		}
+		if (y == 2){
+			doubleDivideX(x);
+			return;
+		}
+		if (x >= y)
+			xAxisCurve(x, y);
+		else
+			yAxisCurve(x, y);
+	}
+	private void yAxisCurve(int x, int y){
+		int curveFactor = (y - x) / 2;
+		curveFactor++;
+
+		turnAround();
+		for (int i = 0; i < y/2 - 1; i++) {
+			move();
+		}
+		turnRight();
+		putBeeper();
+		for (int i = 0; i < x/2 - 1; i++) {
+			move();
+			putBeeper();
+		}
+		turnLeft();
+		for (int i = 0; i < curveFactor; i++) {
+			move();
+			putBeeper();
+		}
+		turnRight();
+		move();
+		turnRight();
+		putBeeper();
+		for (int i = 0; i < curveFactor - 1; i++) {
+			move();
+			putBeeper();
+		}
+		turnLeft();
+		moveWhileFrontClearPutBeeper();
+		// x axis
+		turnAround();
+		for (int i = 0; i < x/2 - 1; i++) {
+			move();
+		}
+		turnLeft();
+		moveWhileFrontClearPutBeeper();
+		turnAround();
+		for (int i = 0; i < y/2 - curveFactor ; i++) {
+			move();
+		}
+		turnLeft();
+		move();
+		turnRight();
+		putBeeper();
+		moveWhileFrontClearPutBeeper();
+	}
+	private void xAxisCurve(int x, int y) {
+		//starting northeast facing north
+		int curveFactor = (x - y) / 2;
+		curveFactor++;
+
+		turnLeft();
+		for (int i = 0; i < x/2 - 1; i++) {
+			move();
+		}
+		turnLeft();
+		putBeeper();
+		for (int i = 0; i < y/2 - 1; i++) {
+			move();
+			putBeeper();
+		}
+		turnRight();
+		for (int i = 0; i < curveFactor; i++) {
+			move();
+			putBeeper();
+		}
+		turnLeft();
+		move();
+		turnLeft();
+		putBeeper();
+		for (int i = 0; i < curveFactor - 1; i++) {
+			move();
+			putBeeper();
+		}
+		turnRight();
+		moveWhileFrontClearPutBeeper();
+		// y axis
+		turnAround();
+		for (int i = 0; i < y/2 - 1; i++) {
+			move();
+		}
+		turnRight();
+		moveWhileFrontClearPutBeeper();
+		turnAround();
+		for (int i = 0; i < x/2 - curveFactor; i++) {
+			move();
+		}
+		turnRight();
+		move();
+		turnLeft();
+		putBeeper();
+		moveWhileFrontClearPutBeeper();
 	}
 	private void divideY(int y){
 		//starting middleSouth facing south
@@ -131,17 +194,20 @@ public class BlankKarel extends SuperKarel {
 		for (int i = 0; i < y/2; i++) {
 			move();
 		}
-		putBeeper();
 		turnLeft();
-		while (frontIsClear()){
-			move();
-			putBeeper();
-		}
+		putBeeper();
+		moveWhileFrontClearPutBeeper();
 		turnAround();
-		while (frontIsClear()) {
-			move();
-			putBeeper();
-		}
+		moveWhileFrontClearPutBeeper();
+	}
+	private void doubleDivideY(int y){
+		divideY(y-1);
+
+		turnLeft();
+		move();
+		turnLeft();
+		putBeeper();
+		moveWhileFrontClearPutBeeper();
 	}
 	private void divideX(int x){
 		//starting from northeast facing north
@@ -151,10 +217,17 @@ public class BlankKarel extends SuperKarel {
 		}
 		turnLeft();
 		putBeeper();
-		while (frontIsClear()){
-			move();
-			putBeeper();
-		}
+		moveWhileFrontClearPutBeeper();
+	}
+	private void doubleDivideX(int x){
+		divideX(x-1);
+
+		turnRight();
+		move();
+		turnRight();
+
+		putBeeper();
+		moveWhileFrontClearPutBeeper();
 	}
 	private void threeChambersY(int y){
 		//starting from northeast facing north
@@ -168,10 +241,7 @@ public class BlankKarel extends SuperKarel {
 			else turnLeft();
 
 			putBeeper();
-			while (frontIsClear()) {
-				move();
-				putBeeper();
-			}
+			moveWhileFrontClearPutBeeper();
 			if (column == 0) {
 				turnLeft();
 				move();
@@ -190,36 +260,47 @@ public class BlankKarel extends SuperKarel {
 			else turnRight();
 
 			putBeeper();
-			while (frontIsClear()) {
-				move();
-				putBeeper();
-			}
+			moveWhileFrontClearPutBeeper();
 			if (column == 0) {
 				turnRight();
 				move();
 			}
 		}
 	}
-
 	private void startPosition(){
-
 		while (notFacingSouth()) {
 			turnLeft();
 		}
-		while (frontIsClear()) {
+		while (frontIsClear()){
 			move();
 		}
-
 		if (rightIsClear()) {
 			turnRight();
 			while (frontIsClear()) {
 				move();
 			}
 		}
-
 		while (notFacingEast()) {
 			turnLeft();
 		}
 	}
+	private int[] calculateArea(){
+		int x = 1,y = 1;
+		while (frontIsClear()){
+			x++;
+			move();
+		}
+		turnLeft();
+		while (frontIsClear()){
+			y++;
+			move();
+		}
+		return new int[]{x,y};
+	}
+	private void moveWhileFrontClearPutBeeper(){
+		while (frontIsClear()){
+			move();
+			putBeeper();
+		}
+	}
 }
-
