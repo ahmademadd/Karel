@@ -40,12 +40,12 @@ public class BlankKarel extends SuperKarel {
 		else if ((x - 2) % 3 == 0 && y == 2) threeChambersX(x);
 		else {
 			if (x % 2 == 0) {
-				if (x != 2 && y != 1) verticalCurve(x, y);
-				else if (y == 1 && x!= 2) doubleDivideX(x);
+				if (y == 1 && x!= 2 || y == 3 && x!= 2) doubleDivideX(x);
+				else if (x != 2) verticalCurve(x, y);
 				if (y != 1) divideY(y);
 			} else {
 				if (x != 1) divideX(x);
-				if (x == 1 && y != 2) doubleDivideY(y);
+				if (x == 1 && y != 2 || x == 3 && y != 2) doubleDivideY(y);
 				else if (y != 2) horizontalCurve(x, y);
 			}
 		}
@@ -67,52 +67,52 @@ public class BlankKarel extends SuperKarel {
 	}
 	public void verticalCurve(int x, int y){
 		turnLeft();
-		moveBy((x-1)/2);
+		moveBy(x/2 - 1);
 		turnLeft();
 		for (int i = 0; i < y/4; i++) {
 			putBeeper();
 			move();
 		}
-		turnRight();
-		if (y != 5)
+		if (((y-1) / 2) % 2 == 1)
 			putBeeper();
+		turnRight();
 		move();
 		turnLeft();
 		for (int i = 0; i < y/2 + 1; i++) {
 			putBeeper();
 			move();
 		}
-		turnLeft();
-		if (y != 5)
+		if (((y-1) / 2) % 2 == 1)
 			putBeeper();
+		turnLeft();
 		move();
 		turnRight();
 		moveWhileFrontClearPutBeeper();
 	}
 	public void horizontalCurve(int x, int y){
 		turnAround();
-		moveBy((y-1)/2);
+		moveBy(y/2-1);
 		turnLeft();
 		for (int i = 0; i < x/4 + 1; i++) {
 			putBeeper();
 			move();
 		}
-		if (x != 5)
+		if (((x-1) / 2) % 2 == 1)
 			putBeeper();
 		turnRight();
 		move();
 		turnLeft();
 		moveWhileFrontClearPutBeeper();
 		turnAround();
-		moveBy(x/2 + 1);
+		moveBy(x/2);
 		turnRight();
 		move();
 		turnLeft();
-		for (int i = 0; i < x/4; i++) {
+		for (int i = 0; i < x/4 + 1; i++) {
 			putBeeper();
 			move();
 		}
-		if (x != 5)
+		if (((x-1) / 2) % 2 == 1)
 			putBeeper();
 		turnLeft();
 		move();
