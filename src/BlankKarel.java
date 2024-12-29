@@ -1,27 +1,23 @@
 import stanford.karel.*;
 public class BlankKarel extends SuperKarel {
+	public static int moveCounter = 0, beeperCount = 0;
+
 	public void run() {
 		startPosition();
-
 		int[] xy = calculateArea();
 		int x = xy[0], y = xy[1];
 
-		if (x%2 == 1 && y%2 == 1)
-			bothOdd(x, y);
-		else if (x%2 == 0 && y%2 == 0)
-			bothEven(x, y);
-		else oddEven(x, y);
+		if (x % 2 == 1 && y % 2 == 1) oddAxes(x, y);
+		else if (x % 2 == 0 && y % 2 == 0) evenAxes(x, y);
+		else oddEvenAxes(x, y);
 
 		println("Beeper count = " + beeperCount);
 	}
-	public static int moveCounter = 0;
 	@Override
 	public void move() {
 		super.move();
-		moveCounter++;
-		println(moveCounter);
+		println(++moveCounter);
 	}
-	public static int beeperCount = 0;
 	@Override
 	public void putBeeper() {
 		if (noBeepersPresent()) {
@@ -29,74 +25,105 @@ public class BlankKarel extends SuperKarel {
 			beeperCount++;
 		}
 	}
-	private void bothOdd(int x, int y){
-		//starting from northeast facing north
-		if (y > x && (y-2)%3 == 0 && x == 1) {
+	private void oddAxes(int x, int y) {
+		if (y > x && (y - 2) % 3 == 0 && x == 1)
 			threeChambersY(y);
-			return;
-		}
-		if (x > y && (x-2)%3 == 0 && y == 1) {
+		else if (x > y && (x - 2) % 3 == 0 && y == 1)
 			threeChambersX(x);
-			return;
-		}
-		if (x != 1){
-			divideX(x);
-		}
-		if (y != 1){
-			divideY(y);
+		else {
+			if (x != 1) divideX(x);
+			if (y != 1) divideY(y);
 		}
 	}
-	private void oddEven(int x, int y) {
-		if ((y-2)%3 == 0 && x == 2) {
-			threeChambersY(y);
-			return;
-		}
-		if ((x-2)%3 == 0 && y == 2) {
-			threeChambersX(x);
-			return;
-		}
-		if (x%2 == 0){
-			if (x != 2) {
-				doubleDivideX(x);
-			}
-			if (y != 1){
-				divideY(y);
-			}
-		} else if (x%2 == 1){
-			if (x != 1){
-				divideX(x);
-			}
-			if (y != 2){
-				doubleDivideY(y);
+	private void oddEvenAxes(int x, int y) {
+		if ((y - 2) % 3 == 0 && x == 2) threeChambersY(y);
+		else if ((x - 2) % 3 == 0 && y == 2) threeChambersX(x);
+		else {
+			if (x % 2 == 0) {
+				if (x != 2 && y != 1) verticalCurve(x, y);
+				else if (y == 1 && x!= 2) doubleDivideX(x);
+				if (y != 1) divideY(y);
+			} else {
+				if (x != 1) divideX(x);
+				if (x == 1 && y != 2) doubleDivideY(y);
+				else if (y != 2) horizontalCurve(x, y);
 			}
 		}
 	}
-	private void bothEven(int x, int y) {
-		//starting from northeast facing north
-		if (y == 2 && x == 2){
-			return;
+	private void evenAxes(int x, int y)  {
+		if (x == 2 && y == 2) twoByTwo();
+		else if (x == 2) doubleDivideY(y);
+		else if (y == 2) doubleDivideX(x);
+		else if (x >= y) xAxisCurve(x, y);
+		else yAxisCurve(x, y);
+	}
+	public void twoByTwo(){
+		putBeeper();
+		turnLeft();
+		move();
+		turnLeft();
+		move();
+		putBeeper();
+	}
+	public void verticalCurve(int x, int y){
+		turnLeft();
+		moveBy((x-1)/2);
+		turnLeft();
+		for (int i = 0; i < y/4; i++) {
+			putBeeper();
+			move();
 		}
-		if (x == 2){
-			doubleDivideY(y);
-			return;
+		turnRight();
+		if (y != 5)
+			putBeeper();
+		move();
+		turnLeft();
+		for (int i = 0; i < y/2 + 1; i++) {
+			putBeeper();
+			move();
 		}
-		if (y == 2){
-			doubleDivideX(x);
-			return;
+		turnLeft();
+		if (y != 5)
+			putBeeper();
+		move();
+		turnRight();
+		moveWhileFrontClearPutBeeper();
+	}
+	public void horizontalCurve(int x, int y){
+		turnAround();
+		moveBy((y-1)/2);
+		turnLeft();
+		for (int i = 0; i < x/4 + 1; i++) {
+			putBeeper();
+			move();
 		}
-		if (x >= y)
-			xAxisCurve(x, y);
-		else
-			yAxisCurve(x, y);
+		if (x != 5)
+			putBeeper();
+		turnRight();
+		move();
+		turnLeft();
+		moveWhileFrontClearPutBeeper();
+		turnAround();
+		moveBy(x/2 + 1);
+		turnRight();
+		move();
+		turnLeft();
+		for (int i = 0; i < x/4; i++) {
+			putBeeper();
+			move();
+		}
+		if (x != 5)
+			putBeeper();
+		turnLeft();
+		move();
+		turnRight();
+		moveWhileFrontClearPutBeeper();
 	}
 	public void yAxisCurve(int x, int y){
 		int curveFactor = (y - x) / 2;
 		curveFactor++;
-
 		turnAround();
-		for (int i = 0; i < y/2 - 1; i++) {
-			move();
-		}
+		moveBy((y-1)/2);
 		turnRight();
 		putBeeper();
 		for (int i = 0; i < x/2 - 1; i++) {
@@ -120,30 +147,21 @@ public class BlankKarel extends SuperKarel {
 		moveWhileFrontClearPutBeeper();
 		// x axis
 		turnAround();
-		for (int i = 0; i < x/2 - 1; i++) {
-			move();
-		}
+		moveBy(x/2 - 1);
 		turnLeft();
 		moveWhileFrontClearPutBeeper();
 		turnAround();
-		for (int i = 0; i < y/2 - curveFactor ; i++) {
-			move();
-		}
+		moveBy(y/2 - curveFactor);
 		turnLeft();
 		move();
 		turnRight();
-		putBeeper();
 		moveWhileFrontClearPutBeeper();
 	}
 	public void xAxisCurve(int x, int y) {
-		//starting northeast facing north
 		int curveFactor = (x - y) / 2;
 		curveFactor++;
-
 		turnLeft();
-		for (int i = 0; i < x/2 - 1; i++) {
-			move();
-		}
+		moveBy((x-1)/2);
 		turnLeft();
 		putBeeper();
 		for (int i = 0; i < y/2 - 1; i++) {
@@ -167,74 +185,51 @@ public class BlankKarel extends SuperKarel {
 		moveWhileFrontClearPutBeeper();
 		// y axis
 		turnAround();
-		for (int i = 0; i < y/2 - 1; i++) {
-			move();
-		}
+		moveBy(y/2 - 1);
 		turnRight();
 		moveWhileFrontClearPutBeeper();
 		turnAround();
-		for (int i = 0; i < x/2 - curveFactor; i++) {
-			move();
-		}
+		moveBy(x/2 - curveFactor);
 		turnRight();
 		move();
 		turnLeft();
-		putBeeper();
 		moveWhileFrontClearPutBeeper();
 	}
 	public void divideY(int y){
-		//starting middleSouth facing south
 		turnAround();
-		for (int i = 0; i < y/2; i++) {
-			move();
-		}
+		moveBy(y/2);
 		turnLeft();
-		putBeeper();
 		moveWhileFrontClearPutBeeper();
 		turnAround();
+		moveWhileFrontClearPutBeeper();
+	}
+	public void divideX(int x){
+		turnLeft();
+		moveBy(x/2);
+		turnLeft();
 		moveWhileFrontClearPutBeeper();
 	}
 	public void doubleDivideY(int y){
 		divideY(y-1);
-
 		turnLeft();
 		move();
 		turnLeft();
-		putBeeper();
-		moveWhileFrontClearPutBeeper();
-	}
-	public void divideX(int x){
-		//starting from northeast facing north
-		turnLeft();
-		for (int i = 0; i < x/2; i++) {
-			move();
-		}
-		turnLeft();
-		putBeeper();
 		moveWhileFrontClearPutBeeper();
 	}
 	public void doubleDivideX(int x){
 		divideX(x-1);
-
 		turnRight();
 		move();
 		turnRight();
-
-		putBeeper();
 		moveWhileFrontClearPutBeeper();
 	}
 	public void threeChambersY(int y){
-		//starting from northeast facing north
 		turnAround();
 		for (int column = 0; column < 2; column++) {
-			for (int i = 0; i < (y-2)/3; i++) {
-				move();
-			}
+			moveBy((y-2)/3);
 			if (column == 0)
 				turnRight();
 			else turnLeft();
-
-			putBeeper();
 			moveWhileFrontClearPutBeeper();
 			if (column == 0) {
 				turnLeft();
@@ -243,17 +238,13 @@ public class BlankKarel extends SuperKarel {
 		}
 	}
 	public void threeChambersX(int x){
-		//starting from northeast facing north
 		turnLeft();
 		for (int column = 0; column < 2; column++) {
-			for (int i = 0; i < (x-2)/3; i++) {
-				move();
-			}
-			if (column == 0)
-				turnLeft();
-			else turnRight();
-
-			putBeeper();
+			moveBy((x-2)/3);
+            if (column == 0)
+                turnLeft();
+            else
+                turnRight();
 			moveWhileFrontClearPutBeeper();
 			if (column == 0) {
 				turnRight();
@@ -262,21 +253,17 @@ public class BlankKarel extends SuperKarel {
 		}
 	}
 	public void startPosition(){
-		while (notFacingSouth()) {
+		while (notFacingSouth())
 			turnLeft();
-		}
-		while (frontIsClear()){
+		while (frontIsClear())
 			move();
-		}
 		if (rightIsClear()) {
 			turnRight();
-			while (frontIsClear()) {
+			while (frontIsClear())
 				move();
-			}
 		}
-		while (notFacingEast()) {
+		while (notFacingEast())
 			turnLeft();
-		}
 	}
 	private int[] calculateArea(){
 		int x = 1,y = 1;
@@ -292,9 +279,13 @@ public class BlankKarel extends SuperKarel {
 		return new int[]{x,y};
 	}
 	private void moveWhileFrontClearPutBeeper(){
+		putBeeper();
 		while (frontIsClear()){
 			move();
 			putBeeper();
 		}
+	}
+	private void moveBy(int length) {
+		for (int i = 0; i < length; i++) move();
 	}
 }
