@@ -26,18 +26,16 @@ public class BlankKarel extends SuperKarel {
 		}
 	}
 	private void oddAxes(int x, int y) {
-		if (y > x && (y - 2) % 3 == 0 && x == 1)
-			threeChambersY(y);
-		else if (x > y && (x - 2) % 3 == 0 && y == 1)
-			threeChambersX(x);
+		if (y > x && (y - 2) % 3 == 0 && x == 1) threeChambersY(y);
+		else if (x > y && (x - 2) % 3 == 0 && y == 1) threeChambersX(x);
 		else {
 			if (x != 1) divideX(x);
 			if (y != 1) divideY(y);
 		}
 	}
 	private void oddEvenAxes(int x, int y) {
-		if ((y - 2) % 3 == 0 && x == 2) threeChambersY(y);
-		else if ((x - 2) % 3 == 0 && y == 2) threeChambersX(x);
+		if ((y - 2) % 3 == 0 && x <= 2) threeChambersY(y);
+		else if ((x - 2) % 3 == 0 && y <= 2) threeChambersX(x);
 		else {
 			if (x % 2 == 0) {
 				if (y == 1 && x!= 2 || y == 3 && x!= 2) doubleDivideX(x);
@@ -52,6 +50,8 @@ public class BlankKarel extends SuperKarel {
 	}
 	private void evenAxes(int x, int y)  {
 		if (x == 2 && y == 2) twoByTwo();
+		else if ((y - 2) % 3 == 0 && x == 2) threeChambersY(y);
+		else if ((x - 2) % 3 == 0 && y == 2) threeChambersX(x);
 		else if (x == 2) doubleDivideY(y);
 		else if (y == 2) doubleDivideX(x);
 		else if (x >= y) xAxisCurve(x, y);
