@@ -34,8 +34,8 @@ public class BlankKarel extends SuperKarel {
 		}
 	}
 	private void oddEvenAxes(int x, int y) {
-		if ((y - 2) % 3 == 0 && x <= 2) threeChambersY(y);
-		else if ((x - 2) % 3 == 0 && y <= 2) threeChambersX(x);
+		if (y >= 5 && (y - 2) % 3 == 0 && x <= 2) threeChambersY(y);
+		else if (x >= 5 && (x - 2) % 3 == 0 && y <= 2) threeChambersX(x);
 		else {
 			if (x % 2 == 0) {
 				if (y == 1 && x!= 2 || y == 3 && x!= 2) doubleDivideX(x);
