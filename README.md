@@ -1,110 +1,132 @@
-# Map Division Program for Karel  
-_By Ahmad Emad_  
+# Map Division Demonstration
 
-- **YouTube Video**: [Watch Here](https://youtu.be/z6CUp96oPaM)  
-- **Email**: [ahmademad995.ae@gmail.com](mailto:ahmademad995.ae@gmail.com)  
+## Author
+**Ahmad Emad**
 
----
+## Contact Information
+- **YouTube Video:** [Map Division Demonstration](https://youtu.be/wqUGu_8BF90)
+- **Email:** ahmademad995.ae@gmail.com
 
-## **Objectives**  
-- Divide any given map into **four equal chambers**.  
-- If four chambers are not possible, divide into the **highest number possible**.  
-- **Minimize the number of code lines**.  
-- **Minimize the number of moves**.  
-- Use the **lowest possible number of beepers**.  
-
----
-
-## **Step-by-Step Solution**  
-
-1. Ensure Karel is at the starting position.  
-2. Calculate the x-axis and y-axis lengths.  
-3. Divide the map into four chambers based on:  
-   - Odd-odd axes.  
-   - Even-even axes.  
-   - Odd-even axes.  
+## Objectives
+- Divide any given map into four equal chambers.
+- If four chambers are not possible, divide the map into the highest number of chambers achievable.
+- Minimize the number of code lines.
+- Reduce the number of moves required.
+- Use the smallest number of beepers possible.
 
 ---
 
-## **Main Methods**  
+## Step-by-Step Solution
 
-### **Public Methods**  
+### 1. **Calculate Map Dimensions**
+Determine the lengths of the x-axis and y-axis.
 
-- **`DivideY(int)`**  
-  - Divides the y-axis into two halves using one wall of beepers.  
+### 2. **Categorize Axes**
+Invoke the appropriate method based on axis properties:
+- **Odd Axes**
+- **Even Axes**
+- **Odd-Even Axes**
 
-- **`DoubleDivideY(int)`**  
-  - Divides the y-axis into two halves using two walls of beepers.  
-
-- **`ThreeChambersY(int)`**  
-  - Divides the y-axis into three parts using two walls of beepers.  
-
-- **`yAxisCurve(int, int)`**  
-  - Divides the map vertically into four chambers using a curved wall of beepers.  
-
-- **`DivideX(int)`**  
-  - Divides the x-axis into two halves using one wall of beepers.  
-
-- **`DoubleDivideX(int)`**  
-  - Divides the x-axis into two halves using two walls of beepers.  
-
-- **`ThreeChambersX(int)`**  
-  - Divides the x-axis into three parts using two walls of beepers.  
-
-- **`XAxisCurve(int, int)`**  
-  - Divides the map horizontally into four chambers using a curved wall of beepers.  
+### 3. **Axis-Specific Division Methods**
+Analyze axes further to call appropriate division methods and handle indivisible axes.
 
 ---
 
-### **Helper Methods**  
+## Main Division Methods
 
-- **`bothOdd(int, int)`**  
-  - Handles odd x and y parameters and decides the optimal division strategy.  
-  - Example: Calls `ThreeChambersX()` if y-axis length is not divisible, and x-axis length allows three chambers.  
+### Y-Axis Division
+- **`divideY(int y)`**
+  Divides the y-axis into two equal halves with one wall of beepers. Suitable for odd y-axis lengths.
+- **`doubleDivideY(int y)`**
+  Divides the y-axis into two equal halves with two walls of beepers. Suitable for even y-axis lengths.
+- **`threeChambersY(int y)`**
+  Divides the y-axis into three parts using two walls of beepers. Suitable for y-axis lengths divisible by 3, especially when x-axis ≤ 2.
 
-- **`bothEven(int, int)`**  
-  - Handles even x and y parameters and selects the best division strategy.  
-  - Example: Calls `yAxisCurve()` if y-axis length > x-axis length, and both are >2.  
-
-- **`oddeven(int, int)`**  
-  - Handles odd-even or even-odd axes and selects an appropriate method.  
-  - Example: Calls `DoubleDivideX()` and `DivideY()` if x-axis is even and >2, and y-axis is odd and >1.  
-
-- **`calculateArea()`**  
-  - Calculates x-axis and y-axis lengths.  
-
-- **`moveWhileFrontClearPutBeeper()`**  
-  - Moves while the front is clear, placing a beeper at each step.  
+### X-Axis Division
+- **`divideX(int x)`**
+  Divides the x-axis into two equal halves with one wall of beepers. Suitable for odd x-axis lengths.
+- **`doubleDivideX(int x)`**
+  Divides the x-axis into two equal halves with two walls of beepers. Suitable for even x-axis lengths.
+- **`threeChambersX(int x)`**
+  Divides the x-axis into three parts using two walls of beepers. Suitable for x-axis lengths divisible by 3, especially when y-axis ≤ 2.
 
 ---
 
-### **Overridden Methods**  
+## Curving Methods
 
-- **`move()`**  
-  - Adds a move counter, incrementing with each call to track the total number of moves.  
+### Y-Axis Curves
+- **`yAxisCurve(int x, int y)`**
+  Creates an overlapping curved vertical wall of beepers to divide the map into four chambers. Suitable when both axes are even, and the y-axis is taller.
 
-- **`putBeeper()`**  
-  - Prevents beeper overlap by checking if a beeper is already present.  
-  - Adds a beeper counter to track usage.  
+### X-Axis Curves
+- **`xAxisCurve(int x, int y)`**
+  Creates an overlapping curved horizontal wall of beepers to divide the map into four chambers. Suitable when both axes are even, and the x-axis is wider.
+
+### Dynamic Curves
+- **`verticalCurve(int x, int y)`**
+  Dynamically adjusts to create a curved vertical wall of beepers. Suitable for even x-axis lengths and odd y-axis lengths.
+- **`horizontalCurve(int x, int y)`**
+  Dynamically adjusts to create a curved horizontal wall of beepers. Suitable for even y-axis lengths and odd x-axis lengths.
+
+---
+
+## Special Case Method
+- **`twoByTwo()`**
+  Handles the specific case where both the x-axis and y-axis lengths are 2, dividing the map diagonally into two chambers.
 
 ---
 
-## **Conclusion**  
+## Analysis Helper Methods
 
-### **Approach**  
-- A **top-down approach**:  
-  - Categorize axes into three cases: **even-even, odd-odd, odd-even**.  
-  - Select appropriate methods based on the scenario.  
+### Axis Categorization
+- **`oddAxes(int x, int y)`**
+  Determines the best method for dividing the map when both axes are odd, such as using `threeChambersX()` or `divideY()` and `divideX()`.
+- **`evenAxes(int x, int y)`**
+  Determines the best method for dividing the map when both axes are even, such as using `yAxisCurve()` or `xAxisCurve()`.
+- **`oddEven(int x, int y)`**
+  Determines the best method for dividing the map when one axis is odd and the other is even, such as using `verticalCurve()` and `divideY()`.
 
-### **Efficiency**  
-- Overridden methods eliminate repetitive checks.  
-- Reusable code follows clean coding principles.  
-  - Example: `moveWhileFrontClearPutBeeper()` has 13 usages; `divideX()` and `divideY()` have 3 usages each.  
-- Methods like `yAxisCurve()` and `XAxisCurve()` minimize beeper usage by curving walls.  
-
-### **Results**  
-- Divides the map into **4 equal chambers** (or the next best number).  
-- Achieved in just **300 lines of code**!  
-- Tracks both **move count** and **beeper usage**.  
+### Area Calculation
+- **`calculateArea()`**
+  Calculates the lengths of the x-axis and y-axis.
 
 ---
+
+## Reusable Helper Methods
+
+### Movement and Beeper Placement
+- **`moveWhileFrontClearPutBeeper()`**
+  Repeatedly moves forward and places a beeper while the path ahead is clear.
+- **`moveBy(int steps)`**
+  Moves a specified number of steps forward.
+
+---
+
+## Overridden Methods
+
+### Movement Tracking
+- **`move()`**
+  Tracks the number of moves made by incrementing a move counter every time this method is called.
+
+### Beeper Placement
+- **`putBeeper()`**
+  Checks if no beeper is present before placing one, preventing overlap. Also increments a beeper counter to track usage.
+
+---
+
+## Conclusion
+This solution employs a top-down approach, categorizing map axes into three main categories: even-even, odd-odd, and odd-even. Based on the category, the system determines the appropriate methods to divide the map.
+
+### Optimization Highlights
+- **Less Redundancy:**
+  - Overridden methods eliminate repetitive condition checks.
+  - Reusable methods like `moveWhileFrontClearPutBeeper()` (16 usages) and `moveBy()` (13 usages) promote clean and efficient code.
+
+- **Efficient Beeper Use:**
+  - Curving methods like `yAxisCurve()` and `xAxisCurve()` reduce the number of beepers by overlapping walls where possible.
+
+- **Maximized Chambers:**
+  - The map is ensured to be divided into four equal chambers or the highest possible number of chambers.
+
+At **only 277 lines of code**, this solution effectively balances functionality, efficiency, and clarity.
+
