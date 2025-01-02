@@ -33,21 +33,23 @@ Analyze axes further to call appropriate division methods and handle indivisible
 
 ## Main Division Methods
 
-### Y-Axis Division
-- **`divideY(int y)`**
-  Divides the y-axis into two equal halves with one wall of beepers. Suitable for odd y-axis lengths.
-- **`doubleDivideY(int y)`**
-  Divides the y-axis into two equal halves with two walls of beepers. Suitable for even y-axis lengths.
-- **`threeChambersY(int y)`**
-  Divides the y-axis into three parts using two walls of beepers. Suitable for y-axis lengths divisible by 3, especially when x-axis ≤ 2.
-
-### X-Axis Division
-- **`divideX(int x)`**
-  Divides the x-axis into two equal halves with one wall of beepers. Suitable for odd x-axis lengths.
-- **`doubleDivideX(int x)`**
-  Divides the x-axis into two equal halves with two walls of beepers. Suitable for even x-axis lengths.
-- **`threeChambersX(int x)`**
-  Divides the x-axis into three parts using two walls of beepers. Suitable for x-axis lengths divisible by 3, especially when y-axis ≤ 2.
+- **`DivideY(int)`**
+  - Divides the y-axis into two halves using one wall of beepers.
+    
+- **`DoubleDivideY(int)`**  
+  - Divides the y-axis into two halves using two walls of beepers.
+    
+- **`ThreeChambersY(int)`**  
+  - Divides the y-axis into three parts using two walls of beepers.
+    
+- **`DivideX(int)`**  
+  - Divides the x-axis into two halves using one wall of beepers.
+    
+- **`DoubleDivideX(int)`**  
+  - Divides the x-axis into two halves using two walls of beepers.
+    
+- **`ThreeChambersX(int)`**  
+  - Divides the x-axis into three parts using two walls of beepers.  
 
 ---
 
