@@ -1,11 +1,10 @@
-# Map Division Demonstration
+# Map Division Program for Karel  
 
-## Author
-**Ahmad Emad**
+_By Ahmad Emad_  
+- **YouTube Video**: [Watch Here](https://youtu.be/wqUGu_8BF90)  
+- **Email**: [ahmademad995.ae@gmail.com](mailto:ahmademad995.ae@gmail.com)  
 
-## Contact Information
-- **YouTube Video:** [Map Division Demonstration](https://youtu.be/wqUGu_8BF90)
-- **Email:** ahmademad995.ae@gmail.com
+---
 
 ## Objectives
 - Divide any given map into four equal chambers.
